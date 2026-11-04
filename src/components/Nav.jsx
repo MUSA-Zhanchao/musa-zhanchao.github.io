@@ -13,7 +13,9 @@ function getInitialTheme() {
   try {
     const saved = localStorage.getItem('theme')
     if (saved === 'light' || saved === 'dark') return saved
-  } catch {}
+  } catch {
+    // storage unavailable (private mode); fall back to system preference
+  }
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
@@ -23,7 +25,7 @@ export default function Nav() {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
-    try { localStorage.setItem('theme', theme) } catch {}
+    try { localStorage.setItem('theme', theme) } catch { /* storage unavailable */ }
   }, [theme])
 
   return (
