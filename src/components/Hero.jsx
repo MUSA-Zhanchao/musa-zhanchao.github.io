@@ -1,44 +1,88 @@
-import { profile } from '../data/content.js'
+import { useEffect, useState } from 'react'
+import WorldMap from './WorldMap.jsx'
+import { cities, profile } from '../data/content.js'
+
+const TOUR_MS = 7000
+const wide = () => window.matchMedia('(min-width: 900px)').matches
 
 export default function Hero() {
+  const [active, setActive] = useState(cities[0].id)
+  const [touring, setTouring] = useState(
+    () => !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
+  )
+  const [isWide, setIsWide] = useState(wide)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 900px)')
+    const onChange = () => setIsWide(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  // Auto-tour through the featured cities until the visitor picks one.
+  useEffect(() => {
+    if (!touring) return
+    const t = setInterval(() => {
+      setActive((id) => cities[(cities.findIndex((c) => c.id === id) + 1) % cities.length].id)
+    }, TOUR_MS)
+    return () => clearInterval(t)
+  }, [touring])
+
+  const select = (id) => {
+    setTouring(false)
+    setActive(id)
+  }
+  const city = cities.find((c) => c.id === active)
+
   return (
-    <section id="top" className="hero">
-      <div className="container hero-grid">
-        <div>
+    <section id="top" className="hero-map">
+      <WorldMap active={active} onSelect={select} offset={isWide ? 0.2 : 0} />
+      <div className="hero-fade" aria-hidden="true" />
+
+      <div className="container hero-overlay">
+        <div className="hero-copy">
           <p className="eyebrow">{profile.title}</p>
           <h1>{profile.name}</h1>
           <p className="affiliation">{profile.affiliation}</p>
           <p className="lead">{profile.summary}</p>
-          <ul className="chips">
-            {profile.interests.map((i) => <li key={i}>{i}</li>)}
-          </ul>
           <div className="cta">
             <a className="btn primary" href="#projects">View projects</a>
             <a className="btn" href={`mailto:${profile.email}`}>Get in touch</a>
             <a className="btn" href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
           </div>
         </div>
-        <NetworkGraphic />
+
+        <aside className="city-panel" aria-live="polite">
+          <div className="city-tabs" role="tablist" aria-label="Featured cities">
+            {cities.map((c) => (
+              <button
+                key={c.id}
+                role="tab"
+                aria-selected={c.id === active}
+                className={c.id === active ? 'city-tab active' : 'city-tab'}
+                onClick={() => select(c.id)}
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
+          <div className="city-body" key={city.id}>
+            <p className="eyebrow small">{city.role}</p>
+            <h3>{city.name}, {city.country}</h3>
+            <p>{city.blurb}</p>
+            {city.projects.length > 0 && (
+              <ul className="city-projects">
+                {city.projects.map((p) => (
+                  <li key={p.title}>
+                    <a href={p.link} target="_blank" rel="noreferrer">{p.title} →</a>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {touring && <div className="tour-bar" style={{ animationDuration: `${TOUR_MS}ms` }} />}
+          </div>
+        </aside>
       </div>
     </section>
-  )
-}
-
-// Decorative transit-map style graphic
-function NetworkGraphic() {
-  return (
-    <svg className="hero-art" viewBox="0 0 300 300" aria-hidden="true">
-      <g fill="none" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 240 L110 150 L110 60 L200 60" stroke="var(--line-1)" />
-        <path d="M30 110 L110 150 L230 150 L280 200" stroke="var(--line-2)" />
-        <path d="M200 20 L200 60 L230 150 L230 280" stroke="var(--line-3)" />
-        <path d="M60 280 L150 200 L230 150" stroke="var(--line-4)" />
-      </g>
-      <g fill="var(--bg)" stroke="var(--text)" strokeWidth="3">
-        {[[110,150],[110,60],[200,60],[230,150],[150,200],[20,240],[30,110],[280,200],[230,280],[60,280],[200,20]].map(([x,y]) => (
-          <circle key={`${x}-${y}`} cx={x} cy={y} r={x===110&&y===150||x===230&&y===150 ? 10 : 6} />
-        ))}
-      </g>
-    </svg>
   )
 }
