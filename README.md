@@ -1,6 +1,6 @@
 # musa-zhanchao.github.io
 
-Personal academic website for **Zhanchao Yang** (MCP / MUSA, University of Pennsylvania), built with **React + Vite**.
+MUSA portfolio website for **Zhanchao Yang** , built with **React + Vite**.
 
 Live: https://musa-zhanchao.github.io/
 
