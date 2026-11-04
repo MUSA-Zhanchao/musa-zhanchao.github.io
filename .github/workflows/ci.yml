@@ -48,6 +48,11 @@ jobs:
     needs: [lint, build]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    # Never cancel a Pages deployment mid-flight: a cancelled deploy can stay
+    # "in progress" on GitHub's side and block every later deployment.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     permissions:
       pages: write
       id-token: write
