@@ -1,5 +1,6 @@
 import Nav from './components/Nav.jsx'
 import Hero from './components/Hero.jsx'
+import Stats from './components/Stats.jsx'
 import Research from './components/Research.jsx'
 import Projects from './components/Projects.jsx'
 import Teaching from './components/Teaching.jsx'
@@ -12,6 +13,7 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
+        <Stats />
         <Research />
         <Projects />
         <Teaching />

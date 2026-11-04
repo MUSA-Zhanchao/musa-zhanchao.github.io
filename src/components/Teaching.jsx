@@ -1,10 +1,11 @@
+import SectionHeader from './SectionHeader.jsx'
 import { teaching } from '../data/content.js'
 
 export default function Teaching() {
   return (
     <section id="teaching" className="section">
       <div className="container">
-        <h2>Talks &amp; Teaching</h2>
+        <SectionHeader num="03" title="Talks & Teaching" />
         <ol className="timeline">
           {teaching.map((t) => (
             <li key={t.title}>

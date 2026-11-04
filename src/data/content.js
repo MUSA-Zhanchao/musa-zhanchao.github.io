@@ -21,6 +21,46 @@ export const profile = {
   github: GH,
 }
 
+// Cities featured on the hero map. coords are [lat, lng].
+export const cities = [
+  {
+    id: 'phl',
+    name: 'Philadelphia',
+    country: 'USA',
+    coords: [39.9526, -75.1652],
+    role: 'Home base · University of Pennsylvania',
+    blurb:
+      'Street-level AI for pedestrian infrastructure, tract-level transit accessibility, and campus engagement tools.',
+    projects: [
+      { title: 'Streetscape Analysis Using AI', link: `${PAGES}/practicum-web-app/` },
+      { title: 'Transit Index Dashboard', link: 'https://zyang91.github.io/transit-index-dashboard/' },
+      { title: 'Anchor Institution Engagement Tool', link: `${PAGES}/engagement-tools-js/` },
+    ],
+  },
+  {
+    id: 'cdmx',
+    name: 'Mexico City',
+    country: 'Mexico',
+    coords: [19.4326, -99.1332],
+    role: 'Transit & travel behavior',
+    blurb:
+      'How the Metro and Metrobús anchor daily life at metropolitan scale, plus research on travel behavior and mode shift.',
+    projects: [
+      { title: "Inside Mexico City's High-Capacity Transit", link: `${PAGES}/mexico-city-metro-storymap/` },
+    ],
+  },
+  {
+    id: 'bog',
+    name: 'Bogotá',
+    country: 'Colombia',
+    coords: [4.711, -74.0721],
+    role: 'Metro research',
+    blurb:
+      'Research assistance with Dr. Erick Guerra on high-capacity transit investment. Work in progress — not yet public.',
+    projects: [],
+  },
+]
+
 export const research = [
   {
     role: 'Graduate Research Assistant',
